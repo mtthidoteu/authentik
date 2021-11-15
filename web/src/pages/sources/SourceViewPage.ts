@@ -12,6 +12,7 @@ import "./ldap/LDAPSourceViewPage";
 import "./oauth/OAuthSourceViewPage";
 import "./plex/PlexSourceViewPage";
 import "./saml/SAMLSourceViewPage";
+import "./scim/SCIMSourceViewPage";
 
 @customElement("ak-source-view")
 export class SourceViewPage extends LitElement {
@@ -50,6 +51,10 @@ export class SourceViewPage extends LitElement {
                 return html`<ak-source-plex-view
                     sourceSlug=${this.source.slug}
                 ></ak-source-plex-view>`;
+            case "ak-source-scim-form":
+                return html`<ak-source-scim-view
+                    sourceSlug=${this.source.slug}
+                ></ak-source-scim-view>`;
             default:
                 return html`<p>Invalid source type ${this.source.component}</p>`;
         }

@@ -14,7 +14,8 @@
         "webauthn",
         "traefik",
         "passwordless",
-        "kubernetes"
+        "kubernetes",
+        "scim",
     ],
     "python.linting.pylintEnabled": true,
     "todo-tree.tree.showCountsInTree": true,

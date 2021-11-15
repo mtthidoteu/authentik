@@ -59,6 +59,7 @@ from authentik.sources.oauth.api.source_connection import UserOAuthSourceConnect
 from authentik.sources.plex.api.source import PlexSourceViewSet
 from authentik.sources.plex.api.source_connection import PlexSourceConnectionViewSet
 from authentik.sources.saml.api import SAMLSourceViewSet
+from authentik.sources.scim.api import SCIMSourceViewSet
 from authentik.stages.authenticator_duo.api import (
     AuthenticatorDuoStageViewSet,
     DuoAdminDeviceViewSet,
@@ -137,6 +138,7 @@ router.register("sources/user_connections/oauth", UserOAuthSourceConnectionViewS
 router.register("sources/user_connections/plex", PlexSourceConnectionViewSet)
 router.register("sources/ldap", LDAPSourceViewSet)
 router.register("sources/saml", SAMLSourceViewSet)
+router.register("sources/scim", SCIMSourceViewSet)
 router.register("sources/oauth", OAuthSourceViewSet)
 router.register("sources/plex", PlexSourceViewSet)
 

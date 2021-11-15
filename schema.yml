@@ -7662,6 +7662,7 @@ paths:
           - authentik.sources.oauth
           - authentik.sources.plex
           - authentik.sources.saml
+          - authentik.sources.scim
           - authentik.stages.authenticator_duo
           - authentik.stages.authenticator_sms
           - authentik.stages.authenticator_static
@@ -13309,6 +13310,283 @@ paths:
   /sources/saml/{slug}/used_by/:
     get:
       operationId: sources_saml_used_by_list
+      description: Get a list of all objects that use this object
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Internal source name, used in URLs.
+        required: true
+      tags:
+      - sources
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsedBy'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+  /sources/scim/:
+    get:
+      operationId: sources_scim_list
+      description: SCIMSource Viewset
+      parameters:
+      - in: query
+        name: authentication_flow
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: enabled
+        schema:
+          type: boolean
+      - in: query
+        name: enrollment_flow
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: managed
+        schema:
+          type: string
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: pbm_uuid
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: policies
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        explode: true
+        style: form
+      - in: query
+        name: policy_engine_mode
+        schema:
+          type: string
+          enum:
+          - all
+          - any
+      - in: query
+        name: property_mappings
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        explode: true
+        style: form
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: slug
+        schema:
+          type: string
+      - in: query
+        name: token
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: user_matching_mode
+        schema:
+          type: string
+          enum:
+          - email_deny
+          - email_link
+          - identifier
+          - username_deny
+          - username_link
+        description: How the source determines if an existing user should be authenticated
+          or a new user enrolled.
+      tags:
+      - sources
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSCIMSourceList'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+    post:
+      operationId: sources_scim_create
+      description: SCIMSource Viewset
+      tags:
+      - sources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMSourceRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMSource'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+  /sources/scim/{slug}/:
+    get:
+      operationId: sources_scim_retrieve
+      description: SCIMSource Viewset
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Internal source name, used in URLs.
+        required: true
+      tags:
+      - sources
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMSource'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+    put:
+      operationId: sources_scim_update
+      description: SCIMSource Viewset
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Internal source name, used in URLs.
+        required: true
+      tags:
+      - sources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMSourceRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMSource'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+    patch:
+      operationId: sources_scim_partial_update
+      description: SCIMSource Viewset
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Internal source name, used in URLs.
+        required: true
+      tags:
+      - sources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSCIMSourceRequest'
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMSource'
+          description: ''
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+    delete:
+      operationId: sources_scim_destroy
+      description: SCIMSource Viewset
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Internal source name, used in URLs.
+        required: true
+      tags:
+      - sources
+      security:
+      - authentik: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          $ref: '#/components/schemas/ValidationError'
+        '403':
+          $ref: '#/components/schemas/GenericError'
+  /sources/scim/{slug}/used_by/:
+    get:
+      operationId: sources_scim_used_by_list
       description: Get a list of all objects that use this object
       parameters:
       - in: path
@@ -19072,6 +19350,7 @@ components:
       - authentik.sources.oauth
       - authentik.sources.plex
       - authentik.sources.saml
+      - authentik.sources.scim
       - authentik.stages.authenticator_duo
       - authentik.stages.authenticator_sms
       - authentik.stages.authenticator_static
@@ -25814,6 +26093,41 @@ components:
       required:
       - pagination
       - results
+    PaginatedSCIMSourceList:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            next:
+              type: number
+            previous:
+              type: number
+            count:
+              type: number
+            current:
+              type: number
+            total_pages:
+              type: number
+            start_index:
+              type: number
+            end_index:
+              type: number
+          required:
+          - next
+          - previous
+          - count
+          - current
+          - total_pages
+          - start_index
+          - end_index
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SCIMSource'
+      required:
+      - pagination
+      - results
     PaginatedSMSDeviceList:
       type: object
       properties:
@@ -28322,6 +28636,42 @@ components:
           description: 'Time offset when temporary users should be deleted. This only
             applies if your IDP uses the NameID Format ''transient'', and the user
             doesn''t log out manually. (Format: hours=1;minutes=2;seconds=3).'
+    PatchedSCIMSourceRequest:
+      type: object
+      description: SCIMSource Serializer
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Source's display Name.
+        slug:
+          type: string
+          minLength: 1
+          description: Internal source name, used in URLs.
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        enabled:
+          type: boolean
+        authentication_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when authenticating existing users.
+        enrollment_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when enrolling new users.
+        policy_engine_mode:
+          $ref: '#/components/schemas/PolicyEngineMode'
+        user_matching_mode:
+          allOf:
+          - $ref: '#/components/schemas/UserMatchingModeEnum'
+          description: How the source determines if an existing user should be authenticated
+            or a new user enrolled.
+        token:
+          type: string
+          format: uuid
     PatchedSMSDeviceRequest:
       type: object
       description: Serializer for sms authenticator devices
@@ -30214,6 +30564,116 @@ components:
       - pre_authentication_flow
       - slug
       - sso_url
+    SCIMSource:
+      type: object
+      description: SCIMSource Serializer
+      properties:
+        pk:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Pbm uuid
+        name:
+          type: string
+          description: Source's display Name.
+        slug:
+          type: string
+          description: Internal source name, used in URLs.
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        enabled:
+          type: boolean
+        authentication_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when authenticating existing users.
+        enrollment_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when enrolling new users.
+        component:
+          type: string
+          readOnly: true
+        verbose_name:
+          type: string
+          readOnly: true
+        verbose_name_plural:
+          type: string
+          readOnly: true
+        meta_model_name:
+          type: string
+          readOnly: true
+        policy_engine_mode:
+          $ref: '#/components/schemas/PolicyEngineMode'
+        user_matching_mode:
+          allOf:
+          - $ref: '#/components/schemas/UserMatchingModeEnum'
+          description: How the source determines if an existing user should be authenticated
+            or a new user enrolled.
+        managed:
+          type: string
+          nullable: true
+          title: Managed by authentik
+          description: Objects which are managed by authentik. These objects are created
+            and updated automatically. This is flag only indicates that an object
+            can be overwritten by migrations. You can still modify the objects via
+            the API, but expect changes to be overwritten in a later update.
+          readOnly: true
+        token:
+          type: string
+          format: uuid
+      required:
+      - component
+      - managed
+      - meta_model_name
+      - name
+      - pk
+      - slug
+      - token
+      - verbose_name
+      - verbose_name_plural
+    SCIMSourceRequest:
+      type: object
+      description: SCIMSource Serializer
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Source's display Name.
+        slug:
+          type: string
+          minLength: 1
+          description: Internal source name, used in URLs.
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        enabled:
+          type: boolean
+        authentication_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when authenticating existing users.
+        enrollment_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow to use when enrolling new users.
+        policy_engine_mode:
+          $ref: '#/components/schemas/PolicyEngineMode'
+        user_matching_mode:
+          allOf:
+          - $ref: '#/components/schemas/UserMatchingModeEnum'
+          description: How the source determines if an existing user should be authenticated
+            or a new user enrolled.
+        token:
+          type: string
+          format: uuid
+      required:
+      - name
+      - slug
+      - token
     SMSDevice:
       type: object
       description: Serializer for sms authenticator devices

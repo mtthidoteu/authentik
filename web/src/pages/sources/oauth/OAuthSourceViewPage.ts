@@ -47,6 +47,8 @@ export function ProviderToLabel(provider?: ProviderTypeEnum): string {
             return "Reddit";
         case ProviderTypeEnum.Twitter:
             return "Twitter";
+        case ProviderTypeEnum.Mailcow:
+            return "Mailcow";
     }
 }
 

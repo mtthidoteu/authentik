@@ -9,6 +9,8 @@ from drf_spectacular.plumbing import (
 from drf_spectacular.settings import spectacular_settings
 from drf_spectacular.types import OpenApiTypes
 
+from authentik.api.apps import AuthentikAPIConfig
+
 
 def build_standard_type(obj, **kwargs):
     """Build a basic type with optional add owns."""
@@ -73,3 +75,12 @@ def postprocess_schema_responses(result, generator, **kwargs):  # noqa: W0613
             comp = result["components"]["schemas"][component]
             comp["additionalProperties"] = {}
     return result
+
+
+def preprocess_schema_exclude_non_api(endpoints, **kwargs):
+    """Filter out all API Views which are not mounted under /api"""
+    return [
+        (path, path_regex, method, callback)
+        for path, path_regex, method, callback in endpoints
+        if path.startswith("/" + AuthentikAPIConfig.mountpoint)
+    ]

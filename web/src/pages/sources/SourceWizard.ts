@@ -21,6 +21,7 @@ import "./ldap/LDAPSourceForm";
 import "./oauth/OAuthSourceForm";
 import "./plex/PlexSourceForm";
 import "./saml/SAMLSourceForm";
+import "./scim/SCIMSourceForm";
 
 @customElement("ak-source-wizard-initial")
 export class InitialSourceWizardPage extends WizardPage {

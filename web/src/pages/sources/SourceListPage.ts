@@ -19,6 +19,7 @@ import "./ldap/LDAPSourceForm";
 import "./oauth/OAuthSourceForm";
 import "./plex/PlexSourceForm";
 import "./saml/SAMLSourceForm";
+import "./scim/SCIMSourceForm";
 
 @customElement("ak-source-list")
 export class SourceListPage extends TablePage<Source> {
