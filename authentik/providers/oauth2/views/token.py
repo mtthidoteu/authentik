@@ -286,26 +286,6 @@ class TokenParams:
 
         token = None
 
-        # TODO: Remove in 2022.7, deprecated field `verification_keys``
-        for cert in self.provider.verification_keys.all():
-            LOGGER.debug("verifying jwt with key", key=cert.name)
-            cert: CertificateKeyPair
-            public_key = cert.certificate.public_key()
-            if cert.private_key:
-                public_key = cert.private_key.public_key()
-            try:
-                token = decode(
-                    assertion,
-                    public_key,
-                    algorithms=[JWTAlgorithms.RS256, JWTAlgorithms.ES256],
-                    options={
-                        "verify_aud": False,
-                    },
-                )
-            except (PyJWTError, ValueError, TypeError) as exc:
-                LOGGER.warning("failed to validate jwt", exc=exc)
-        # TODO: End remove block
-
         source: Optional[OAuthSource] = None
         parsed_key: Optional[PyJWK] = None
         for source in self.provider.jwks_sources.all():
