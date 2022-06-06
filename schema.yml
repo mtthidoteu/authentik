@@ -28672,6 +28672,7 @@ components:
         token:
           type: string
           format: uuid
+          nullable: true
     PatchedSMSDeviceRequest:
       type: object
       description: Serializer for sms authenticator devices
@@ -30624,14 +30625,23 @@ components:
         token:
           type: string
           format: uuid
+          nullable: true
+        root_url:
+          type: string
+          readOnly: true
+        token_obj:
+          allOf:
+          - $ref: '#/components/schemas/Token'
+          readOnly: true
       required:
       - component
       - managed
       - meta_model_name
       - name
       - pk
+      - root_url
       - slug
-      - token
+      - token_obj
       - verbose_name
       - verbose_name_plural
     SCIMSourceRequest:
@@ -30670,10 +30680,10 @@ components:
         token:
           type: string
           format: uuid
+          nullable: true
       required:
       - name
       - slug
-      - token
     SMSDevice:
       type: object
       description: Serializer for sms authenticator devices
