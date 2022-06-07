@@ -68,7 +68,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: prepare variables
         id: ev
-        uses: ./.github/actions/docker-setup
+        uses: ./.github/actions/docker-push-variables
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       - name: Login to Container Registry
@@ -88,6 +88,8 @@ jobs:
             ghcr.io/goauthentik/dev-${{ matrix.type }}:gh-${{ steps.ev.outputs.branchNameContainer }}
             ghcr.io/goauthentik/dev-${{ matrix.type }}:gh-${{ steps.ev.outputs.branchNameContainer }}-${{ steps.ev.outputs.timestamp }}
             ghcr.io/goauthentik/dev-${{ matrix.type }}:gh-${{ steps.ev.outputs.sha }}
+          labels: |
+            versionFamily=${{ steps.ev.outputs.versionFamily }}
           file: ${{ matrix.type }}.Dockerfile
           build-args: |
             GIT_BUILD_HASH=${{ steps.ev.outputs.sha }}

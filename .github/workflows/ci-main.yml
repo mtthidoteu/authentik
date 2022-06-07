@@ -214,7 +214,7 @@ jobs:
         id: ev
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        uses: ./.github/actions/docker-setup
+        uses: ./.github/actions/docker-push-variables
       - name: Login to Container Registry
         uses: docker/login-action@v2
         if: ${{ steps.ev.outputs.shouldBuild == 'true' }}
